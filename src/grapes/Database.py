@@ -1,4 +1,6 @@
-import os
+import os, json
+
+from .Errors.TableError import TableAlreadyExists, TableNameIsBlankOrInvalid
 
 # Tato's Notes-To-Self #
 
@@ -21,8 +23,6 @@ class Database:
 		self.__generate_files(self.__dir_structure)
 		self.__get_tables(self.__tables_dir)
 
-		print(self.__tables)
-
 		return
 	
 	def __generate_files(self,dir_structure:dict) -> None:
@@ -44,4 +44,30 @@ class Database:
 					# Get a definition from the table's
 					# index.json file of the order of
 					# tables.
+		return
+	
+	def force_reload(self) -> None:
+		self.__generate_files()
+		self.__get_tables()
+
+	def create_table(self,table_name:str,columns:list=[]) -> None:
+		if table_name in self.__tables:
+			raise TableAlreadyExists(f"There's already a table called {table_name} in the database.")
+		if table_name.replace(" ", "") == "":
+			raise TableNameIsBlankOrInvalid(f"Table name cannot be blank.")
+		special_characters:list = ["\\","/",";","*","?","\"","<",">","|"] # got i hate windows and macos
+		for special_char in special_characters:
+			if table_name.find(special_char) != -1:
+				raise TableNameIsBlankOrInvalid(f"The table name cannot have any special characters in it.")
+		
+		os.mkdir(f"{self.__tables_dir}/{table_name}")
+		index:dict = {
+			"last": 0,
+		}
+		if columns != []:
+			for column in columns:
+				pass # Temporary for error update commit.
+
+		# Table creation.
+		
 		return

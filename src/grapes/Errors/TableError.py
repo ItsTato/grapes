@@ -1,9 +1,15 @@
 class TableAlreadyExists(Exception):
     def __init__(self, message:str) -> None:
         super().__init__(message)
-        self.message:str = message
+        self.__message:str = message
+    @property
+    def message(self) -> str:
+        return self.__message
 
 class TableNameIsBlankOrInvalid(Exception):
     def __init__(self, message:str) -> None:
         super().__init__(message)
-        self.message:str = message
+        self.__message:str = message
+    @property
+    def message(self) -> str:
+        return self.__message
