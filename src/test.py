@@ -1,3 +1,3 @@
-from grapes import CachedDatabase
+from grapes import Database
 
-db:CachedDatabase = CachedDatabase()
+db:Database = Database()
