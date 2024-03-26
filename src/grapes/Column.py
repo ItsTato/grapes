@@ -9,5 +9,5 @@ class Column:
 	def Name(self) -> str:
 		return self.__name
 	@property
-	def Of(self) -> Type:
+	def OfType(self) -> Type:
 		return self.__type
