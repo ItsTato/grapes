@@ -1,7 +1,7 @@
-import os, json, shutil
+import os, shutil, pickle
 
-from .Errors import TableError
-from .Types import Type
+from .Errors import TableError, InsertError
+from .Types import Type, any
 from .Column import Column
 
 # Tato's Notes-To-Self #
@@ -21,10 +21,9 @@ class Database:
 			}
 		}
 		self.__tables:dict = {}
-		
+		self.__last_at:dict = {}
 		self.__generate_files(self.__dir_structure)
 		self.__get_tables(self.__tables_dir)
-
 		return
 	
 	def __generate_files(self,dir_structure:dict) -> None:
@@ -40,11 +39,12 @@ class Database:
 	def __get_tables(self,tables_dir:str) -> None:
 		for table in os.listdir(tables_dir):
 			self.__tables[table] = {}
-			with open(f"{tables_dir}/table/def.json","r") as file:
-				definition:dict = json.load(file)
+			with open(f"{tables_dir}/{table}/def.bin","rb") as file:
+				definition:dict = pickle.load(file)
 				file.close()
-			for column, value in definition["columns"].items():
-				self.__tables[table][column] = Column(column,Type(value["type"]),value["default_value"],value["auto_increment"],value["increment_by"])
+			self.__last_at[table] = definition["last"]
+			for column, object in definition["columns"].items():
+				self.__tables[table][column] = object
 		return
 	
 	def force_reload(self) -> None:
@@ -61,24 +61,21 @@ class Database:
 			if table_name.find(special_char) != -1:
 				raise TableError.TableNameIsBlankOrInvalid(f"The table name cannot have any special characters in it.")
 		os.mkdir(f"{self.__tables_dir}/{table_name}")
-		index:dict = {
-			"last": 0
+		definition:dict = {
+			"last": 0,
+			"columns": {}
 		}
 		if len(columns) == 0:
 			raise TableError.TableHasNoColumns("Tables must have at least one (1) column when first created.")
 		for column in columns:
-			index[f"{column.Name}"] = {
-				"type": column.OfType.Name,
-				"default": column.DefaultValue,
-				"auto_increment": column.AutoIncrement,
-				"increment_by": column.IncrementBy
-			}
+			definition["columns"][f"{column.Name}"] = column
 			with open(f"{self.__tables_dir}/{table_name}/{column.Name}.grapelet","wb") as file:
-				file.write(b"")
+				pickle.dump([],file)
 				file.close()
-		with open(f"{self.__tables_dir}/{table_name}/def.json","w") as file:
-			json.dump(index,file)
+		with open(f"{self.__tables_dir}/{table_name}/def.bin","wb") as file:
+			pickle.dump(definition,file)
 			file.close()
+		self.__get_tables(self.__tables_dir)
 		return
 	
 	def delete_table(self,table_name:str) -> None:
@@ -86,4 +83,19 @@ class Database:
 			raise TableError.TableDoesNotExist(f"No table with the name {table_name} was found in the database.")
 		shutil.rmtree(f"{self.__tables_dir}/{table_name}",False)
 		del self.__tables[table_name]
+		return
+	
+	def has_table(self,table_name:str) -> bool:
+		return table_name in self.__tables
+	
+	def insert_into(self,table_name:str,values:tuple) -> None:
+		if table_name not in self.__tables:
+			raise InsertError.TableNotFound(f"Table {table_name} does not exist.")
+		if len(values) == 0:
+			raise InsertError.EmptyRequest("Please provide at least one (1) value in the request.")
+		if len(values) > self.__tables[table_name]:
+			raise InsertError.ExtraValue("An extra value was / Extra values were provided in the request")
+		with open(f"{self.__tables_dir}/{table_name}/def.json","rb") as file:
+			definition:dict = pickle.load(file)
+			file.close()
 		return
