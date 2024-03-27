@@ -1,6 +1,8 @@
 import os, json
 
 from .Errors import TableError
+from .Types import Type
+from .Column import Column
 
 # Tato's Notes-To-Self #
 
@@ -38,12 +40,11 @@ class Database:
 	def __get_tables(self,tables_dir:str) -> None:
 		for table in os.listdir(tables_dir):
 			self.__tables[table] = {}
-			for column in os.listdir(os.path.join(tables_dir, table)):
-				if column != "def.json":
-					self.__tables[table][column] = {}
-					# Get a definition from the table's
-					# index.json file of the order of
-					# tables.
+			with open(f"{tables_dir}/table/def.json","r") as file:
+				definition:dict = json.load(file)
+				file.close()
+			for column, value in definition["columns"].items():
+				self.__tables[table][column] = Column(column,Type(value["type"]),value["default_value"],value["auto_increment"],value["increment_by"])
 		return
 	
 	def force_reload(self) -> None:
