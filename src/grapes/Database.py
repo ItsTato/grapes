@@ -68,12 +68,12 @@ class Database:
 			raise TableError.TableHasNoColumns("Tables must have at least one (1) column when first created.")
 		for column in columns:
 			index[f"{column.Name}"] = {
-				"type": column.OfType,
+				"type": column.OfType.Name,
 				"default": column.DefaultValue,
 				"auto_increment": column.AutoIncrement,
 				"increment_by": column.IncrementBy
 			}
-			with open(f"{self.__tables_dir}/{table_name}/{column.Name}","wb") as file:
+			with open(f"{self.__tables_dir}/{table_name}/{column.Name}.grapelet","wb") as file:
 				file.write(b"")
 				file.close()
 
