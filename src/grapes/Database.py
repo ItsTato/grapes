@@ -13,7 +13,7 @@ class Database:
 		self.__main_dir:str = os.path.dirname(os.path.realpath(__file__))
 		self.__data_dir:str = f"{self.__main_dir}{data_directory}"
 		self.__tables_dir:str = f"{self.__data_dir}/tables"
-		self.__dir_structure = {
+		self.__dir_structure:dict = {
 			self.__data_dir: {
 				self.__tables_dir: {}
 			}
@@ -90,5 +90,12 @@ class Database:
 			raise InsertError.EmptyRequest("Please provide at least one (1) value in the request.")
 		if len(values) > self.__tables[table_name]:
 			raise InsertError.ExtraValue("An extra value was / Extra values were provided in the request")
-		
+		self.__tables["last"] += 1
+		columns_iterable:list = list(self.__tables["columns"].items())
+		for index, value in enumerate(values):
+			with open(f"{self.__tables_dir}/{table_name}/{columns_iterable[index]}","r+b") as file:
+				data = pickle.load(file)
+				data.append(value)
+				pickle.dump(data,file)
+				file.close()
 		return
