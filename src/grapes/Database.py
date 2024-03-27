@@ -1,4 +1,4 @@
-import os, json
+import os, json, shutil
 
 from .Errors import TableError
 from .Types import Type
@@ -56,11 +56,10 @@ class Database:
 			raise TableError.TableAlreadyExists(f"There's already a table called {table_name} in the database.")
 		if table_name.replace(" ", "") == "":
 			raise TableError.TableNameIsBlankOrInvalid(f"Table name cannot be blank.")
-		special_characters:list = ["\\","/",";","*","?","\"","<",">","|"] # got i hate windows and macos
+		special_characters:list = ["\\","/",";","*","?","\"","<",">","|"] # god i hate binbows and copiumOS
 		for special_char in special_characters:
 			if table_name.find(special_char) != -1:
 				raise TableError.TableNameIsBlankOrInvalid(f"The table name cannot have any special characters in it.")
-		
 		os.mkdir(f"{self.__tables_dir}/{table_name}")
 		index:dict = {
 			"last": 0
@@ -77,9 +76,14 @@ class Database:
 			with open(f"{self.__tables_dir}/{table_name}/{column.Name}.grapelet","wb") as file:
 				file.write(b"")
 				file.close()
-
 		with open(f"{self.__tables_dir}/{table_name}/def.json","w") as file:
 			json.dump(index,file)
 			file.close()
-		
+		return
+	
+	def delete_table(self,table_name:str) -> None:
+		if table_name not in self.__tables:
+			raise TableError.TableDoesNotExist(f"No table with the name {table_name} was found in the database.")
+		shutil.rmtree(f"{self.__tables_dir}/{table_name}",False)
+		del self.__tables[table_name]
 		return
