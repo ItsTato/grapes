@@ -1,1 +1,1 @@
-from . import TableError, ColumnError
+from . import InsertError, TableError, ColumnError
