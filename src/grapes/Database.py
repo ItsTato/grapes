@@ -1,6 +1,6 @@
 import os, json
 
-from .Errors.TableError import TableAlreadyExists, TableNameIsBlankOrInvalid
+from .Errors import TableError
 
 # Tato's Notes-To-Self #
 
@@ -39,7 +39,7 @@ class Database:
 		for table in os.listdir(tables_dir):
 			self.__tables[table] = {}
 			for column in os.listdir(os.path.join(tables_dir, table)):
-				if column != "index.json":
+				if column != "def.json":
 					self.__tables[table][column] = {}
 					# Get a definition from the table's
 					# index.json file of the order of
@@ -47,27 +47,38 @@ class Database:
 		return
 	
 	def force_reload(self) -> None:
-		self.__generate_files()
-		self.__get_tables()
+		self.__generate_files(self.__dir_structure)
+		self.__get_tables(self.__tables_dir)
 
 	def create_table(self,table_name:str,columns:list=[]) -> None:
 		if table_name in self.__tables:
-			raise TableAlreadyExists(f"There's already a table called {table_name} in the database.")
+			raise TableError.TableAlreadyExists(f"There's already a table called {table_name} in the database.")
 		if table_name.replace(" ", "") == "":
-			raise TableNameIsBlankOrInvalid(f"Table name cannot be blank.")
+			raise TableError.TableNameIsBlankOrInvalid(f"Table name cannot be blank.")
 		special_characters:list = ["\\","/",";","*","?","\"","<",">","|"] # got i hate windows and macos
 		for special_char in special_characters:
 			if table_name.find(special_char) != -1:
-				raise TableNameIsBlankOrInvalid(f"The table name cannot have any special characters in it.")
+				raise TableError.TableNameIsBlankOrInvalid(f"The table name cannot have any special characters in it.")
 		
 		os.mkdir(f"{self.__tables_dir}/{table_name}")
 		index:dict = {
-			"last": 0,
+			"last": 0
 		}
-		if columns != []:
-			for column in columns:
-				pass # Temporary for error update commit.
+		if len(columns) == 0:
+			raise TableError.TableHasNoColumns("Tables must have at least one (1) column when first created.")
+		for column in columns:
+			index[f"{column.Name}"] = {
+				"type": column.OfType,
+				"default": column.DefaultValue,
+				"auto_increment": column.AutoIncrement,
+				"increment_by": column.IncrementBy
+			}
+			with open(f"{self.__tables_dir}/{table_name}/{column.Name}","wb") as file:
+				file.write(b"")
+				file.close()
 
-		# Table creation.
+		with open(f"{self.__tables_dir}/{table_name}/def.json","w") as file:
+			json.dump(index,file)
+			file.close()
 		
 		return
