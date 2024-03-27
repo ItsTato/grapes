@@ -1,8 +1,6 @@
 import os, shutil, pickle
 
 from .Errors import TableError, InsertError
-from .Types import Type, any
-from .Column import Column
 
 # Tato's Notes-To-Self #
 
@@ -21,7 +19,6 @@ class Database:
 			}
 		}
 		self.__tables:dict = {}
-		self.__last_at:dict = {}
 		self.__generate_files(self.__dir_structure)
 		self.__get_tables(self.__tables_dir)
 		return
@@ -42,9 +39,7 @@ class Database:
 			with open(f"{tables_dir}/{table}/def.bin","rb") as file:
 				definition:dict = pickle.load(file)
 				file.close()
-			self.__last_at[table] = definition["last"]
-			for column, object in definition["columns"].items():
-				self.__tables[table][column] = object
+			self.__tables[table] = definition
 		return
 	
 	def force_reload(self) -> None:
@@ -95,7 +90,5 @@ class Database:
 			raise InsertError.EmptyRequest("Please provide at least one (1) value in the request.")
 		if len(values) > self.__tables[table_name]:
 			raise InsertError.ExtraValue("An extra value was / Extra values were provided in the request")
-		with open(f"{self.__tables_dir}/{table_name}/def.json","rb") as file:
-			definition:dict = pickle.load(file)
-			file.close()
+		
 		return
