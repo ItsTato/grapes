@@ -8,6 +8,7 @@ To install grapes just drag and drop the `grapes` folder into any project you wa
 
 ## Current Project Goals
 - Use a single .grape file for the entire database. This file should be in binary (pickle) and would ideally help reduce any lag that may be experienced from the host operating system's file system.
+- At **least** convert tables into a single .grapelet file instead of keeping every column individual.
 
 ## Project Roadmap
 
