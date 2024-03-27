@@ -1,6 +1,6 @@
 import os, shutil, pickle
 
-from .Errors import TableError, InsertError
+from .Errors import TableError, InsertError, GetError
 
 # Tato's Notes-To-Self #
 
@@ -83,6 +83,9 @@ class Database:
 	def has_table(self,table_name:str) -> bool:
 		return table_name in self.__tables
 	
+	def __make_iterable_columns(self,columns:dict) -> list:
+		return list(columns.items())
+
 	def insert_into(self,table_name:str,values:tuple) -> None:
 		if table_name not in self.__tables:
 			raise InsertError.TableNotFound(f"Table {table_name} does not exist.")
@@ -91,7 +94,7 @@ class Database:
 		if len(values) > self.__tables[table_name]:
 			raise InsertError.ExtraValue("An extra value was / Extra values were provided in the request")
 		self.__tables["last"] += 1
-		columns_iterable:list = list(self.__tables["columns"].items())
+		columns_iterable:list = self.__make_iterable_columns(self.__tables["columns"])
 		for index, value in enumerate(values):
 			with open(f"{self.__tables_dir}/{table_name}/{columns_iterable[index]}","r+b") as file:
 				data = pickle.load(file)
@@ -99,3 +102,13 @@ class Database:
 				pickle.dump(data,file)
 				file.close()
 		return
+	
+	def get_all(self,table_name:str) -> list[tuple]:
+		if table_name not in self.__tables:
+			raise GetError.TableNotFound(f"Table {table_name} does not exist.")
+		columns_iterable:list = self.__make_iterable_columns(self.__tables["columns"])
+		for column in columns_iterable:
+			with open(f"{self.__tables_dir}/{table_name}/{column.Name}.grapelet","rb") as file:
+				data:list = pickle.load(file)
+				file.close()
+		return []
