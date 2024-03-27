@@ -17,5 +17,6 @@ To install grapes just drag and drop the `grapes` folder into any project you wa
 - ~~Creation~~
 - ~~Deletion~~
 - ~~Insertion~~
+- Retrieval
 - Removal
 - Modification
