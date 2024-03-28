@@ -87,7 +87,7 @@ class GrapesDatabase:
 	
 	def insert_into(self,table_name:str,values:tuple[any]) -> None:
 		if table_name not in self.__tables:
-			raise InsertError.TableNotFound(f"No table with the name {table_name} could be found.")
+			raise InsertError.TableNotFound(f"No table with the name \"{table_name}\' could be found.")
 		if len(values) == 0:
 			raise InsertError.EmptyRequest("At least one (1) value must be provided in the request.")
 		if len(values) > self.__tables[table_name].Columns:
@@ -105,4 +105,12 @@ class GrapesDatabase:
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
 			pickle.dump(data,file)
 			file.close()
-		
+		return
+	
+	def get_all(self,table_name:str) -> list[tuple]:
+		if table_name not in self.__tables:
+			raise GetError.TableNotFound(f"No table with the name \"{table_name}\' could be found.")
+		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
+			data:list[tuple] = pickle.load(file)
+			file.close()
+		return data
