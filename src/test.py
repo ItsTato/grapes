@@ -1,10 +1,14 @@
-from grapes import Database, Column, Types
+from grapes import GrapesDatabase, Table, Column, Types
 
-db:Database = Database()
+db:GrapesDatabase = GrapesDatabase()
 
 if not db.has_table("Users"):
-	db.create_table("Users",columns=[
-		Column("ID",Types.INTEGER,0,True),
-		Column("Name",Types.STRING,"",False),
-		Column("Robux",Types.INTEGER,0,False)
-	])
+	db.create_table(Table(
+		"Users",
+		columns=[
+			Column("ID",Types.INTEGER,0,True),
+			Column("Name",Types.STRING,"",False),
+			Column("Robux",Types.INTEGER,0,False)
+		]
+	))
+

@@ -96,7 +96,7 @@ class Database:
 		self.__tables["last"] += 1
 		columns_iterable:list = self.__make_iterable_columns(self.__tables["columns"])
 		for index, value in enumerate(values):
-			with open(f"{self.__tables_dir}/{table_name}/{columns_iterable[index]}","r+b") as file:
+			with open(f"{self.__tables_dir}/{table_name}/{columns_iterable[index]}.grapelet","r+b") as file:
 				data = pickle.load(file)
 				data.append(value)
 				pickle.dump(data,file)
