@@ -22,7 +22,10 @@ class GrapesDatabase:
 		}
 		self.__tables:dict = {}
 		self.__generate_files(self.__dir_structure)
-		self.__update_definition()
+		if os.path.exists(f"{self.__tables_dir}/definition.bin"):
+			self.__update_definition()
+		else:
+			self.__upgrade_definition()
 		return
 	
 	def __generate_files(self,dir_structure:dict) -> None:
@@ -58,7 +61,7 @@ class GrapesDatabase:
 			raise TableError.TableNameIsBlankOrInvalid(f"Table name cannot be blank!")
 		special_characters:list = ["<",">",":","\"","/","\\","|","?","*"] # god i hate binbows and copiumOS
 		for special_char in special_characters:
-			if table.Name.find(special_char) != False:
+			if special_char in table.Name:
 				raise TableError.TableNameIsBlankOrInvalid(f"You cannot use special characters in the table name! ({special_char})")
 		if len(table.Columns) == 0:
 			raise TableError.TableHasNoColumns(f"Tables must have at least one (1) table.")
@@ -85,22 +88,22 @@ class GrapesDatabase:
 	def has_table(self,table_name:str) -> bool:
 		return table_name in self.__tables
 	
-	def insert_into(self,table_name:str,values:tuple[any]) -> None:
+	def insert_into(self,table_name:str,values:tuple[any,...]) -> None:
 		if table_name not in self.__tables:
 			raise InsertError.TableNotFound(f"No table with the name \"{table_name}\' could be found.")
 		if len(values) == 0:
 			raise InsertError.EmptyRequest("At least one (1) value must be provided in the request.")
-		if len(values) > self.__tables[table_name].Columns:
+		if len(values) > len(self.__tables[table_name].Columns):
 			raise InsertError.ExtraValue("The request has more values than the table has columns.")
 		self.__tables[table_name].Last += 1
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
 			data:list[tuple] = pickle.load(file)
 			file.close()
-		if len(values) < len(self.__tables[table_name].Columns):
+		if len(values) != len(self.__tables[table_name].Columns):
 			for index, column in enumerate(self.__tables[table_name].Columns):
-				if len(values) < index:
-					values += (column.Default,) # type: ignore
+				if len(values) < index+1:
+					values += (column.DefaultValue,)
 		data.append(values)
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
 			pickle.dump(data,file)
@@ -114,3 +117,5 @@ class GrapesDatabase:
 			data:list[tuple] = pickle.load(file)
 			file.close()
 		return data
+	
+

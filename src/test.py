@@ -12,3 +12,5 @@ if not db.has_table("Users"):
 		]
 	))
 
+db.insert_into("Users",(37,"Howdy",1))
+print(db.get_all("Users"))
