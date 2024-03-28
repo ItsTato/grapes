@@ -7,16 +7,18 @@ Grapes is a poorly-written, self-proclaimed "database" written entirely in Pytho
 To install grapes just drag and drop the `grapes` folder into any project you want or add it to your `site_packages` folder for use over all of python.
 
 ## Current Project Goals
-- ~~Use a single .grape file for the entire database. This file should be in binary (pickle) and would ideally help reduce any lag that may be experienced from the host operating system's file system.~~
-- ~~At **least** convert tables into a single .grapelet file instead of keeping every column individual.~~
-- Each table will be a `.grape` file. Every table will be kept in the same folder structure of right now /`data`/`tables`/. At the root of the database folder (/`data`/) there will be a special `definition.bin` file just like there is one for every table as of writing this. With this file all information about columns will be stored plus some meta database information. (such as *grapes* version, *Python* version, etc.)
+- Each table will be a `.grape` file. Every table will be kept in the same folder structure of right now /`data`/`tables`/. At the root of the database folder (/`data`/) there will be a special `definition.bin` file ~~just like there is one for every table as of writing this~~. With this file all information about columns will be stored plus some meta database information. (such as *grapes* version, *Python* version, etc.)
 
 ## Project Roadmap
 
 ### Table
 - ~~Creation~~
 - ~~Deletion~~
+- Modification
+
+### Stored Data
 - ~~Insertion~~
-- Retrieval
+- ~~Retrieval~~
+- Specific Retrieval
 - Removal
 - Modification
