@@ -1,5 +1,5 @@
 ---
-name: Bug report
+name: Bug Report
 about: Creating a bug report helps us make grapes better!
 title: "[BUG] "
 labels: bug
