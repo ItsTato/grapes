@@ -5,9 +5,7 @@ Grapes is a poorly-written, self-proclaimed "database" made entirely using only 
 Want to talk to us or need further help? Feel free to join our [community server](https://discord.gg/SqdNj5mYn5)!
 
 ## Installing
-**WARNING: Grapes is currently not on pypi. You can NOT obtain it officially through pip.**
-
-To install grapes just drag and drop the `grapes` folder into any project you want or add it to your `site_packages` folder for use over all of python.
+Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for installation instructions.
 
 ## Current Project Goals
 - **[ACHIEVED]** Each table will be a `.grape` file. Every table will be kept in the same folder structure of right now /`data`/`tables`/. At the root of the database folder (/`data`/) there will be a special `definition.bin` file ~~just like there is one for every table as of writing this~~. With this file all information about columns will be stored plus some meta database information. (such as `grapes` version, `Python` version, etc.)
