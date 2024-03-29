@@ -7,7 +7,7 @@ from .Types import any
 from .Table import Table
 from .GrapesDatabase import GrapesDatabase
 
-class InMemoryDatabase(GrapesDatabase):
+class InMemoryGrapesDatabase(GrapesDatabase):
 	def __init__(self,data_directory:str="/data",write_rate:float=120.0) -> None:
 		super().__init__(data_directory=data_directory)
 		self.__table_data:dict = {}

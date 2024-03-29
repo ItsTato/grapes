@@ -15,5 +15,5 @@ if not db.has_table("Users"):
 db.insert_into("Users",(37,"Howdy",1))
 print(db.get_all("Users"))
 
-from grapes import InMemoryDatabase
-db2:InMemoryDatabase = InMemoryDatabase("/data2")
+from grapes import InMemoryGrapesDatabase
+db2:InMemoryGrapesDatabase = InMemoryGrapesDatabase("/data2")
