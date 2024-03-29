@@ -42,7 +42,6 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 			time.sleep(self.__write_rate)
 			self._GrapesDatabase__upgrade_definition()
 			self.__upgrade_tables()
-		return
 	
 	def write_all_data(self) -> None:
 		self._GrapesDatabase__upgrade_definition()
