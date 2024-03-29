@@ -1,5 +1,5 @@
 # grapes
-Grapes is a poorly-written, self-proclaimed "database" made entirely using only Python 3.10 out of all things. You really shouldn't use this...
+Grapes is a poorly-written, self-proclaimed "database" made entirely using only Python 3.10 out of all things...
 
 ## Installing
 **WARNING: Grapes is currently not on pypi. You can NOT obtain it officially through pip.**
