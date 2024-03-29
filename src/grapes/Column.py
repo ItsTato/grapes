@@ -10,7 +10,7 @@ class Column:
 		self.__default_value:any = default_value
 		self.__auto_increment:bool = auto_increment
 		self.__increment_by:Union[int,float] = increment_by
-		if (type.Name != "integer" and type.Name != "float") and auto_increment:
+		if (type.Name != "int" and type.Name != "float") and auto_increment:
 			raise ColumnInvalidSetting("You cannot use auto increments on anything other than integers or floats.")
 		return
 	@property

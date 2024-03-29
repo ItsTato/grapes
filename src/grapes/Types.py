@@ -8,10 +8,10 @@ class Type:
     def Name(self) -> str:
         return self.__name
 
-STRING:Type = Type("string")
-INTEGER:Type = Type("integer")
+STRING:Type = Type("str")
+INTEGER:Type = Type("int")
 FLOAT:Type = Type("float")
-DICTIONARY:Type = Type("dictionary")
+DICTIONARY:Type = Type("dict")
 BOOLEAN:Type = Type("boolean")
 LIST:Type = Type("list")
 TUPLE:Type = Type("tuple")
