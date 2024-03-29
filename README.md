@@ -1,6 +1,9 @@
 # grapes
 Grapes is a poorly-written, self-proclaimed "database" made entirely using only Python 3.10 out of all things...
 
+## Community
+Want to talk to us? Feel free to join us [on Discord!](https://discord.gg/SqdNj5mYn5)
+
 ## Installing
 **WARNING: Grapes is currently not on pypi. You can NOT obtain it officially through pip.**
 
