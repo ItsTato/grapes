@@ -112,10 +112,10 @@ class GrapesDatabase:
 			file.close()
 		return
 	
-	def get_all(self,table_name:str) -> list[Union[tuple,None]]:
+	def get_all(self,table_name:str) -> list[Union[tuple[any,...],None]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table with the name \"{table_name}\' could be found.")
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
-			data:list[Union[tuple,None]] = pickle.load(file)
+			data:list[Union[tuple[any,...],None]] = pickle.load(file)
 			file.close()
 		return data
