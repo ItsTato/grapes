@@ -66,12 +66,8 @@ class GrapesDatabase:
 				raise TableError.TableNameIsBlankOrInvalid(f"You cannot use special characters in the table name! ({special_char})")
 		if len(table.Columns) == 0:
 			raise TableError.TableHasNoColumns(f"Tables must have at least one (1) table.")
-		with open(f"{self.__tables_dir}/definition.bin","r+b") as file:
-			definition:dict = pickle.load(file)
-			definition[table.Name] = table
-			pickle.dump(definition,file)
-			file.close()
 		self.__tables[table.Name] = table
+		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table.Name}.grape","wb") as file:
 			pickle.dump([],file)
 			file.close()
@@ -82,9 +78,7 @@ class GrapesDatabase:
 			raise TableError.TableDoesNotExist(f"No table with the name \"{table_name}\" exists.")
 		os.remove(f"{self.__tables_dir}/{table_name}.grape")
 		del self.__tables[table_name]
-		with open(f"{self.__tables_dir}/definition.bin","wb") as file:
-			pickle.dump(self.__tables,file)
-			file.close()
+		self.__upgrade_definition()
 		return
 	
 	def has_table(self,table_name:str) -> bool:
@@ -102,7 +96,6 @@ class GrapesDatabase:
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
 			data:list[tuple] = pickle.load(file)
 			file.close()
-		
 		for index, column in enumerate(self.__tables[table_name].Columns):
 			if len(values) < index+1:
 				values += (column.DefaultValue,)
