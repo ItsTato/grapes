@@ -85,6 +85,7 @@ class GrapesDatabase:
 		with open(f"{self.__tables_dir}/definition.bin","wb") as file:
 			pickle.dump(self.__tables,file)
 			file.close()
+		return
 	
 	def has_table(self,table_name:str) -> bool:
 		return table_name in self.__tables
