@@ -102,10 +102,12 @@ class GrapesDatabase:
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
 			data:list[tuple] = pickle.load(file)
 			file.close()
-		if len(values) != len(self.__tables[table_name].Columns):
-			for index, column in enumerate(self.__tables[table_name].Columns):
-				if len(values) < index+1:
-					values += (column.DefaultValue,)
+		
+		for index, column in enumerate(self.__tables[table_name].Columns):
+			if len(values) < index+1:
+				values += (column.DefaultValue,)
+			if type(values[index]).__name__ != column.OfType.Name:
+				raise InsertError.TypeError("Inserted value must be of matching type to column's type.")
 		data.append(values)
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
 			pickle.dump(data,file)
