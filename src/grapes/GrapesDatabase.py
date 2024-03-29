@@ -114,3 +114,18 @@ class GrapesDatabase:
 			data:list[Union[tuple[any,...],None]] = pickle.load(file)
 			file.close()
 		return data
+
+	def get_where(self,table_name:str,column_name:str,is_equal_to:any) -> Union[tuple[any,...],None]:
+		if table_name not in self.__tables:
+			raise GetError.TableNotFound(f"No table with the name \"{table_name}\' could be found.")
+		data:list[Union[tuple[any,...],None]] = self.get_all(table_name)
+		for row in data:
+			column_index:int = -1
+			for index, column in enumerate(self.__tables[table_name].Columns):
+				if column.Name == column_name:
+					column_index = index
+					break
+			if column_index != -1:
+				if row[column_index] == is_equal_to: # type: ignore 
+					return row
+		return None
