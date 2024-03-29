@@ -120,12 +120,19 @@ class GrapesDatabase:
 			raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
 		data:list[Union[tuple[any,...],None]] = self.get_all(table_name)
 		for row in data:
-			column_index:int = -1
 			for index, column in enumerate(self.__tables[table_name].Columns):
-				if column.Name == column_name:
-					column_index = index
-					break
-			if column_index != -1:
-				if row[column_index] == is_equal_to: # type: ignore 
+				if column.Name == column_name and row[index] == is_equal_to: # type: ignore
 					return row
 		return None
+
+	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[Union[tuple[any,...],None]]:
+		if table_name not in self.__tables:
+			raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
+		data:list[Union[tuple[any,...],None]] = self.get_all(table_name)
+		to_return:list[Union[tuple[any,...],None]] = []
+		for row in data:
+			for index, column in enumerate(self.__tables[table_name].Columns):
+				if column.Name == column_name and row[index] == is_equal_to: # type: ignore 
+					to_return.append(row)
+					break
+		return to_return
