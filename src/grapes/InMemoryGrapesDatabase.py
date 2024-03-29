@@ -62,7 +62,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 	
 	def insert_into(self,table_name:str,values:tuple[any,...]) -> None:
 		if table_name not in self._GrapesDatabase__tables:
-			raise InsertError.TableNotFound(f"No table with the name \"{table_name}\' could be found.")
+			raise InsertError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
 		if len(values) == 0:
 			raise InsertError.EmptyRequest("At least one (1) value must be provided in the request.")
 		if len(values) > len(self._GrapesDatabase__tables[table_name].Columns):
@@ -78,5 +78,9 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 	
 	def get_all(self,table_name:str) -> list[Union[tuple,None]]:
 		if table_name not in self._GrapesDatabase__tables:
-			raise GetError.TableNotFound(f"No table with the name \"{table_name}\' could be found.")
+			raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
 		return self.__table_data[table_name]
+
+	def get_where(self,table_name:str,column_name:str,is_equal_to:any) -> Union[tuple[any,...],None]:
+		if table_name not in self._GrapesDatabase__tables:
+		raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")	
