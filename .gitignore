@@ -161,7 +161,7 @@ cython_debug/
 
 
 
-src/grapes/data
 .vscode/
 src/bin_tests.py
+*.grape
 *.bin
