@@ -132,7 +132,9 @@ class GrapesDatabase:
 		to_return:list[Union[tuple[any,...],None]] = []
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
-				if column.Name == column_name and row[index] == is_equal_to: # type: ignore 
+				if column.Name != column_name:
+					break
+				if row[index] == is_equal_to: # type: ignore
 					to_return.append(row)
 					break
 		return to_return
