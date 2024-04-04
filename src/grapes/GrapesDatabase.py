@@ -65,7 +65,7 @@ class GrapesDatabase:
 			if special_char in table.Name:
 				raise TableError.TableNameIsBlankOrInvalid(f"You cannot use special characters in the table name! ({special_char})")
 		if len(table.Columns) == 0:
-			raise TableError.TableHasNoColumns(f"Tables must have at least one (1) table.")
+			raise TableError.TableHasNoColumns(f"Tables must have at least one (1) column.")
 		self.__tables[table.Name] = table
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table.Name}.grape","wb") as file:
