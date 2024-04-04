@@ -24,9 +24,9 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 # Desktop (please complete the following information):
- - **OS:** [e.g. iOS]
+ - **OS:** [e.g. Windows, Linux Mint, MacOS, etc...]
  - **Python Version:** [e.g. 3.10]
- - **Grapes Version:** [e.g. 22]
+ - **Grapes Version:** [e.g. 1.0.0]
 
 # Additional Context
 Add any other context about the problem here.
