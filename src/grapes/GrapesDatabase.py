@@ -54,6 +54,7 @@ class GrapesDatabase:
 	def force_reload(self) -> None:
 		self.__generate_files(self.__dir_structure)
 		self.__update_definition()
+		return
 	
 	def create_table(self,table:Table) -> None:
 		if table.Name in self.__tables:

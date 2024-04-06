@@ -91,7 +91,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 		return None
 	
 	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[Union[tuple[any,...],None]]:
-		if table_name not in self._GrapesDatabase__table:
+		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
 		to_return:list[Union[tuple[any,...],None]] = []
 		for row in self.__table_data:
