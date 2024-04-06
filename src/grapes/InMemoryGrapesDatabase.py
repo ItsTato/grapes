@@ -1,6 +1,3 @@
-# type: ignore
-# Pylance is really insistent on bothering me right now..
-
 import pickle, time
 from threading import Thread
 from typing import Union
