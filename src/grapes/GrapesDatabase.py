@@ -85,7 +85,7 @@ class GrapesDatabase:
 			if special_char in table.Name:
 				raise TableError.TableNameIsBlankOrInvalid(f"You cannot use special characters in the table name! ({special_char})")
 		if len(table.Columns) == 0:
-			raise TableError.TableHasNoColumns(f"Tables must have at least one (1) column.")
+			raise TableError.TableHasNoColumns(f"Tables must have at least one (1) column in order to be created.")
 		self.__tables[table.Name] = table
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table.Name}.grape","wb") as file:
@@ -95,7 +95,7 @@ class GrapesDatabase:
 	
 	def delete_table(self,table_name:str) -> None:
 		if table_name not in self.__tables:
-			raise TableError.TableDoesNotExist(f"No table with the name \"{table_name}\" exists.")
+			raise TableError.TableDoesNotExist(f"No table named \"{table_name}\" could be found or exists in the database.")
 		os.remove(f"{self.__tables_dir}/{table_name}.grape")
 		del self.__tables[table_name]
 		self.__upgrade_definition()
@@ -106,11 +106,11 @@ class GrapesDatabase:
 	
 	def insert_into(self,table_name:str,values:tuple[any,...]) -> None:
 		if table_name not in self.__tables:
-			raise InsertError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
+			raise InsertError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		if len(values) == 0:
-			raise InsertError.EmptyRequest("At least one (1) value must be provided in the request.")
+			raise InsertError.EmptyRequest("At least one (1) value must be provided in the insert request.")
 		if len(values) > len(self.__tables[table_name].Columns):
-			raise InsertError.ExtraValue("The request has more values than the table has columns.")
+			raise InsertError.ExtraValue("The insert request has more values than the table has columns.")
 		self.__tables[table_name].Last += 1
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
@@ -120,7 +120,7 @@ class GrapesDatabase:
 			if len(values) < index+1:
 				values += (column.DefaultValue,)
 			if type(values[index]).__name__ != column.OfType.Name:
-				raise InsertError.TypeError("Inserted value must be of matching type to column's type.")
+				raise InsertError.TypeError("Inserted value must be of matching type to column's type. (i.e. str==str, int!=str)")
 		data.append(values)
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
 			pickle.dump(data,file)
@@ -129,7 +129,7 @@ class GrapesDatabase:
 	
 	def get_all(self,table_name:str) -> list[Union[tuple[any,...],None]]:
 		if table_name not in self.__tables:
-			raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
+			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
 			data:list[Union[tuple[any,...],None]] = pickle.load(file)
 			file.close()
@@ -137,7 +137,7 @@ class GrapesDatabase:
 
 	def get_where(self,table_name:str,column_name:str,is_equal_to:any) -> Union[tuple[any,...],None]:
 		if table_name not in self.__tables:
-			raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
+			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		data:list[Union[tuple[any,...],None]] = self.get_all(table_name)
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
@@ -147,14 +147,14 @@ class GrapesDatabase:
 
 	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[Union[tuple[any,...],None]]:
 		if table_name not in self.__tables:
-			raise GetError.TableNotFound(f"No table with the name \"{table_name}\" could be found.")
+			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		data:list[Union[tuple[any,...],None]] = self.get_all(table_name)
 		to_return:list[Union[tuple[any,...],None]] = []
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
 				if column.Name != column_name:
 					break
-				if row[index] == is_equal_to: # type: ignore
+				if row[index] == is_equal_to:
 					to_return.append(row)
 					break
 		return to_return
