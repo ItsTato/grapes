@@ -114,7 +114,7 @@ class GrapesDatabase:
 		self.__tables[table_name].Last += 1
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
-			data:list[tuple] = pickle.load(file)
+			data:list[Union[tuple[any,...],None]] = pickle.load(file)
 			file.close()
 		for index, column in enumerate(self.__tables[table_name].Columns):
 			if len(values) < index+1:
