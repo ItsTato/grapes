@@ -32,12 +32,12 @@ class GrapesDatabase:
 		warn_grapes:bool = False
 		warn_python:bool = False
 		for table in self.__tables:
-			if table.GRAPES_VERSION != GRAPES_VERSION:
+			if self.__tables[table].GRAPES_VERSION != GRAPES_VERSION:
 				if not warn_grapes: warn_grapes = True
-				print(f"[grapes] CRITICAL | Table \"{table.Name}\" was made with grapes version {table.GRAPES_VERSION} but you're running {GRAPES_VERSION}!")
-			if table.PYTHON_VERSION != PYTHON_VERSION:
+				print(f"[grapes] CRITICAL | Table \"{self.__tables[table].Name}\" was made with grapes version {self.__tables[table].GRAPES_VERSION} but you're running {GRAPES_VERSION}!")
+			if self.__tables[table].PYTHON_VERSION != PYTHON_VERSION:
 				if not warn_python: warn_python = True
-				print(f"[grapes] CRITICAL | Table \"{table.Name}\" was made with python version {table.PYTHON_VERSION} but you're running {PYTHON_VERSION}!")
+				print(f"[grapes] CRITICAL | Table \"{self.__tables[table].Name}\" was made with python version {self.__tables[table].PYTHON_VERSION} but you're running {PYTHON_VERSION}!")
 		if warn_grapes:
 			print("[grapes] CRITICAL | Re-making any out-dated tables with your current grapes version is recommended! If you don't know how, feel free to ask!")
 			if not self.__force_through_warnings:
@@ -120,7 +120,7 @@ class GrapesDatabase:
 			if len(values) < index+1:
 				values += (column.DefaultValue,)
 			if type(values[index]).__name__ != column.OfType.Name:
-				raise InsertError.TypeError("Inserted value must be of matching type to column's type. (i.e. str==str, int!=str)")
+				raise InsertError.TypeError("Inserted value must be of matching type to column's allowed type. (i.e. str==str, int!=str)")
 		data.append(values)
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
 			pickle.dump(data,file)
@@ -141,9 +141,11 @@ class GrapesDatabase:
 		data:list[Union[tuple[any,...],None]] = self.get_all(table_name)
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
-				if column.Name == column_name and row[index] == is_equal_to: # type: ignore
+				if column.Name != column_name:
+					break
+				if row[index] == is_equal_to:
 					return row
-		return None
+		return
 
 	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[Union[tuple[any,...],None]]:
 		if table_name not in self.__tables:
