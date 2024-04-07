@@ -142,7 +142,7 @@ class GrapesDatabase:
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
 				if column.Name != column_name:
-					break
+					continue
 				if row[index] == is_equal_to:
 					return row
 		return
@@ -155,8 +155,7 @@ class GrapesDatabase:
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
 				if column.Name != column_name:
-					break
+					continue
 				if row[index] == is_equal_to:
 					to_return.append(row)
-					break
 		return to_return
