@@ -4,6 +4,7 @@ from typing import Union
 from .Table import Table
 from .Errors import TableError, InsertError, GetError
 from .Types import any
+from .__meta import GRAPES_VERSION, PYTHON_VERSION
 
 # Tato's Notes-To-Self #
 
@@ -27,6 +28,19 @@ class GrapesDatabase:
 			self.__update_definition()
 		else:
 			self.__upgrade_definition()
+		warn_grapes:bool = False
+		warn_python:bool = False
+		for table in self.__tables:
+			if table.GRAPES_VERSION != GRAPES_VERSION:
+				if not warn_grapes: warn_grapes = True
+				print(f"[grapes] CRITICAL | Table \"{table.Name}\" was made with grapes version {table.GRAPES_VERSION} but you're running {GRAPES_VERSION}!")
+			if table.PYTHON_VERSION != PYTHON_VERSION:
+				if not warn_python: warn_python = True
+				print(f"[grapes] CRITICAL | Table \"{table.Name}\" was made with python version {table.PYTHON_VERSION} but you're running {PYTHON_VERSION}!")
+		if warn_grapes:
+			print("[grapes] CRITICAL | Re-making any out-dated tables with your current grapes version is recommended! If you don't know how, feel free to ask!")
+		if warn_python:
+			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer potential data loss if you don't re-make the table for this version of switch to the table's version")
 		return
 	
 	def __generate_files(self,dir_structure:dict) -> None:
