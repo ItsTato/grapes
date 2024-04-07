@@ -41,11 +41,11 @@ class GrapesDatabase:
 		if warn_grapes:
 			print("[grapes] CRITICAL | Re-making any out-dated tables with your current grapes version is recommended! If you don't know how, feel free to ask!")
 			if not self.__force_through_warnings:
-				raise Exception("Execution cannot continue for your own safety.")
+				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
 		if warn_python:
 			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer from potential data loss if you don't re-make the table for this version of switch to the table's version")
 			if not self.__force_through_warnings:
-				raise Exception("Execution cannot continue for your own safety.")
+				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
 		return
 	
 	def __generate_files(self,dir_structure:dict) -> None:
