@@ -60,7 +60,7 @@ class GrapesDatabase:
 	
 	def __update_definition(self) -> None:
 		with open(f"{self.__tables_dir}/definition.bin","rb") as file:
-			self.__tables = pickle.load(file)
+			self.__tables:dict = pickle.load(file)
 			file.close()
 		return
 	
