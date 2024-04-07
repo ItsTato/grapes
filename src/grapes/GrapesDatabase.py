@@ -13,7 +13,8 @@ from .__meta import GRAPES_VERSION, PYTHON_VERSION
 # (same with compression)
 
 class GrapesDatabase:
-	def __init__(self,data_directory:str="/data") -> None:
+	def __init__(self,data_directory:str="/data",force_through_warnings:bool=False) -> None:
+		self.__force_through_warnings:bool = force_through_warnings
 		self.__main_dir:str = os.path.dirname(os.path.realpath(__file__))
 		self.__data_dir:str = f"{self.__main_dir}{data_directory}"
 		self.__tables_dir:str = f"{self.__data_dir}/tables"
@@ -39,8 +40,12 @@ class GrapesDatabase:
 				print(f"[grapes] CRITICAL | Table \"{table.Name}\" was made with python version {table.PYTHON_VERSION} but you're running {PYTHON_VERSION}!")
 		if warn_grapes:
 			print("[grapes] CRITICAL | Re-making any out-dated tables with your current grapes version is recommended! If you don't know how, feel free to ask!")
+			if not self.__force_through_warnings:
+				raise Exception("Execution cannot continue for your own safety.")
 		if warn_python:
-			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer potential data loss if you don't re-make the table for this version of switch to the table's version")
+			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer from potential data loss if you don't re-make the table for this version of switch to the table's version")
+			if not self.__force_through_warnings:
+				raise Exception("Execution cannot continue for your own safety.")
 		return
 	
 	def __generate_files(self,dir_structure:dict) -> None:
