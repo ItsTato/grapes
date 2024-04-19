@@ -73,7 +73,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 		self.__modified_tables.append(table_name)
 		return
 	
-	def get_all(self,table_name:str) -> list[Union[tuple,None]]:
+	def get_all(self,table_name:str) -> list[tuple[any,...]]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		return self.__table_data[table_name]
@@ -87,10 +87,10 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 					return row
 		return None
 	
-	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[Union[tuple[any,...],None]]:
+	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[tuple[any,...]]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
-		to_return:list[Union[tuple[any,...],None]] = []
+		to_return:list[tuple[any,...]] = []
 		for row in self.__table_data:
 			for index, column in enumerate(self._GrapesDatabase__tables[table_name].Columns):
 				if column.Name == column_name and row[index] == is_equal_to:
