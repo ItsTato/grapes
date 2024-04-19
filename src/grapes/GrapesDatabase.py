@@ -127,11 +127,11 @@ class GrapesDatabase:
 			file.close()
 		return
 	
-	def get_all(self,table_name:str) -> list[Union[tuple[any,...],None]]:
+	def get_all(self,table_name:str) -> list[tuple[any,...]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
-			data:list[Union[tuple[any,...],None]] = pickle.load(file)
+			data:list[tuple[any,...]] = pickle.load(file)
 			file.close()
 		return data
 
@@ -147,11 +147,11 @@ class GrapesDatabase:
 					return row
 		return
 
-	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[Union[tuple[any,...],None]]:
+	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[tuple[any,...]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
-		data:list[Union[tuple[any,...],None]] = self.get_all(table_name)
-		to_return:list[Union[tuple[any,...],None]] = []
+		data:list[tuple[any,...]] = self.get_all(table_name)
+		to_return:list[tuple[any,...]] = []
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
 				if column.Name != column_name:
