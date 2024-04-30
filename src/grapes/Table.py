@@ -1,4 +1,4 @@
-from .__meta import GRAPES_VERSION, PYTHON_VERSION
+from .__meta__ import GRAPES_VERSION, PYTHON_VERSION
 from .Column import Column
 
 class Table:

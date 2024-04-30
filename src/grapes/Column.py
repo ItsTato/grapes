@@ -1,23 +1,22 @@
-from typing import Union
+from typing import Union, Any as any, Callable
 
-from .Types import Type, any
 from .Errors.ColumnError import ColumnInvalidSetting
 
 class Column:
-	def __init__(self,name:str,type:Type,default_value:any="",auto_increment:bool=False,increment_by:Union[int,float]=1) -> None:
+	def __init__(self,name:str,type:Callable,default_value:any="",auto_increment:bool=False,increment_by:Union[int,float]=1) -> None:
 		self.__name:str = name
-		self.__type:Type = type
+		self.__type:Callable = type
 		self.__default_value:any = default_value
 		self.__auto_increment:bool = auto_increment
 		self.__increment_by:Union[int,float] = increment_by
-		if (type.Name != "int" and type.Name != "float") and auto_increment:
+		if (type != int and type != float) and auto_increment:
 			raise ColumnInvalidSetting("You cannot use auto increments on anything other than integers or floats.")
 		return
 	@property
 	def Name(self) -> str:
 		return self.__name
 	@property
-	def OfType(self) -> Type:
+	def OfType(self) -> Callable:
 		return self.__type
 	@property
 	def DefaultValue(self) -> any:
