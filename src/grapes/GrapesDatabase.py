@@ -1,10 +1,9 @@
 import os, pickle
-from typing import Union
+from typing import Union, Any as any
 
 from .Table import Table
 from .Errors import TableError, InsertError, GetError
-from .Types import any
-from .__meta import GRAPES_VERSION, PYTHON_VERSION
+from .__meta__ import GRAPES_VERSION, PYTHON_VERSION
 
 # Tato's Notes-To-Self #
 
@@ -13,10 +12,10 @@ from .__meta import GRAPES_VERSION, PYTHON_VERSION
 # (same with compression)
 
 class GrapesDatabase:
-	def __init__(self,data_directory:str="/data",force_through_warnings:bool=False) -> None:
+	def __init__(self,file_loc:str,data_directory:str="./data",force_through_warnings:bool=False) -> None:
 		self.__force_through_warnings:bool = force_through_warnings
-		self.__main_dir:str = os.path.dirname(os.path.realpath(__file__))
-		self.__data_dir:str = f"{self.__main_dir}{data_directory}"
+		self.__main_dir:str = os.path.dirname(os.path.realpath(file_loc)) if "." in data_directory else os.path.dirname(os.path.realpath(data_directory))
+		self.__data_dir:str = os.path.join(self.__main_dir,data_directory)
 		self.__tables_dir:str = f"{self.__data_dir}/tables"
 		self.__dir_structure:dict = {
 			self.__data_dir: {
@@ -119,7 +118,7 @@ class GrapesDatabase:
 		for index, column in enumerate(self.__tables[table_name].Columns):
 			if len(values) < index+1:
 				values += (column.DefaultValue,)
-			if type(values[index]).__name__ != column.OfType.Name:
+			if type(values[index]) != column.OfType:
 				raise InsertError.TypeError("Inserted value must be of matching type to column's allowed type. (i.e. str==str, int!=str)")
 		data.append(values)
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:

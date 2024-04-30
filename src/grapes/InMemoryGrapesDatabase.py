@@ -1,15 +1,14 @@
 import pickle, time
 from threading import Thread
-from typing import Union
+from typing import Union, Any as any
 
 from .Errors import InsertError, GetError
-from .Types import any
 from .Table import Table
 from .GrapesDatabase import GrapesDatabase
 
 class InMemoryGrapesDatabase(GrapesDatabase):
-	def __init__(self,data_directory:str="/data",write_rate:float=120.0,force_through_warnings:bool=False) -> None:
-		super().__init__(data_directory=data_directory,force_through_warnings=force_through_warnings)
+	def __init__(self,file_loc:str,data_directory:str="./data",write_rate:float=120.0,force_through_warnings:bool=False) -> None:
+		super().__init__(file_loc=file_loc,data_directory=data_directory,force_through_warnings=force_through_warnings)
 		self.__table_data:dict = {}
 		self.__write_rate:float = write_rate
 		self.__modified_tables:list=[]
