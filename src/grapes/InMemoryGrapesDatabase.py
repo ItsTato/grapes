@@ -16,7 +16,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 		self.__upgrade_thread:Thread = Thread(target=self.__write_data_thread)
 		self.__upgrade_thread.daemon = True
 		self.__upgrade_thread.start()
-	
+
 	def __update_tables(self) -> None:
 		for table in self._GrapesDatabase__tables:
 			with open(f"{self._GrapesDatabase__tables_dir}/{table}.grape","rb") as file:
@@ -27,27 +27,27 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 			self.__modified_tables.remove(table)
 			with open(f"{self._GrapesDatabase__tables_dir}/{table}.grape","wb") as file:
 				pickle.dump(self.__table_data[table],file)
-	
+
 	def __write_data_thread(self) -> None:
 		while True:
 			time.sleep(self.__write_rate)
 			self._GrapesDatabase__upgrade_definition()
 			self.__upgrade_tables()
-	
+
 	def write_all_data(self) -> None:
 		self._GrapesDatabase__upgrade_definition()
 		self.__upgrade_tables()
-	
+
 	def create_table(self,table:Table) -> None:
 		super().create_table(table)
 		self.__table_data[table.Name]:list[tuple[Any,...]] = []
-	
+
 	def delete_table(self, table_name: str) -> None:
 		super().delete_table(table_name)
 		del self.__table_data[table_name]
 		if table_name in self.__modified_tables:
 			self.__modified_tables.remove(table_name)
-	
+
 	def insert_into(self,table_name:str,values:tuple[Any,...]) -> None:
 		if table_name not in self._GrapesDatabase__tables:
 			raise InsertError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
@@ -62,7 +62,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 					values += (column.DefaultValue,)
 		self.__table_data[table_name].append(values)
 		self.__modified_tables.append(table_name)
-	
+
 	def get_all(self,table_name:str) -> list[tuple[Any,...]]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
@@ -76,7 +76,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 				if column.Name == column_name and row[index] == is_equal_to:
 					return row
 		return ()
-	
+
 	def get_all_where(self,table_name:str,column_name:str,is_equal_to:Any) -> list[tuple[Any,...]]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
