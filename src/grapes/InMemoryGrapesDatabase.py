@@ -1,6 +1,6 @@
 import pickle, time
 from threading import Thread
-from typing import Union, Any as any
+from typing import Union, Any
 
 from .Errors import InsertError, GetError
 from .Table import Table
@@ -48,7 +48,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 		if table_name in self.__modified_tables:
 			self.__modified_tables.remove(table_name)
 	
-	def insert_into(self,table_name:str,values:tuple[any,...]) -> None:
+	def insert_into(self,table_name:str,values:tuple[Any,...]) -> None:
 		if table_name not in self._GrapesDatabase__tables:
 			raise InsertError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		if len(values) == 0:
@@ -63,12 +63,12 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 		self.__table_data[table_name].append(values)
 		self.__modified_tables.append(table_name)
 	
-	def get_all(self,table_name:str) -> list[tuple[any,...]]:
+	def get_all(self,table_name:str) -> list[tuple[Any,...]]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		return self.__table_data[table_name]
 
-	def get_where(self,table_name:str,column_name:str,is_equal_to:any) -> Union[tuple[any,...]]:
+	def get_where(self,table_name:str,column_name:str,is_equal_to:Any) -> Union[tuple[Any,...]]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		for row in self.__table_data:
@@ -77,10 +77,10 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 					return row
 		return ()
 	
-	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[tuple[any,...]]:
+	def get_all_where(self,table_name:str,column_name:str,is_equal_to:Any) -> list[tuple[Any,...]]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
-		to_return:list[tuple[any,...]] = []
+		to_return:list[tuple[Any,...]] = []
 		for row in self.__table_data:
 			for index, column in enumerate(self._GrapesDatabase__tables[table_name].Columns):
 				if column.Name == column_name and row[index] == is_equal_to:

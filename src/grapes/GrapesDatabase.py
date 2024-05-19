@@ -1,5 +1,5 @@
 import os, pickle
-from typing import Union, Any as any
+from typing import Union, Any
 
 from .Table import Table
 from .Errors import TableError, InsertError, GetError
@@ -38,13 +38,13 @@ class GrapesDatabase:
 				if not warn_python: warn_python = True
 				print(f"[grapes] CRITICAL | Table \"{self.__tables[table].Name}\" was made with python version {self.__tables[table].PYTHON_VERSION} but you're running {PYTHON_VERSION}!")
 		if warn_grapes:
-			print("[grapes] CRITICAL | Re-making any out-dated tables with your current grapes version is recommended! If you don't know how, feel free to ask!")
+			print("[grapes] CRITICAL | Re-making Any out-dated tables with your current grapes version is recommended! If you don't know how, feel free to ask!")
 			if not self.__force_through_warnings:
-				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
+				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed Anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
 		if warn_python:
 			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer from potential data loss if you don't re-make the table for this version of switch to the table's version")
 			if not self.__force_through_warnings:
-				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
+				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed Anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
 	
 	def __generate_files(self,dir_structure:dict) -> None:
 		for parent, children in dir_structure.items():
@@ -93,7 +93,7 @@ class GrapesDatabase:
 	def has_table(self,table_name:str) -> bool:
 		return table_name in self.__tables
 	
-	def insert_into(self,table_name:str,values:tuple[any,...]) -> None:
+	def insert_into(self,table_name:str,values:tuple[Any,...]) -> None:
 		if table_name not in self.__tables:
 			raise InsertError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		if len(values) == 0:
@@ -103,7 +103,7 @@ class GrapesDatabase:
 		self.__tables[table_name].Last += 1
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
-			data:list[Union[tuple[any,...],None]] = pickle.load(file)
+			data:list[Union[tuple[Any,...],None]] = pickle.load(file)
 		for index, column in enumerate(self.__tables[table_name].Columns):
 			if len(values) < index+1:
 				values += (column.DefaultValue,)
@@ -113,17 +113,17 @@ class GrapesDatabase:
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
 			pickle.dump(data,file)
 	
-	def get_all(self,table_name:str) -> list[tuple[any,...]]:
+	def get_all(self,table_name:str) -> list[tuple[Any,...]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
-			data:list[tuple[any,...]] = pickle.load(file)
+			data:list[tuple[Any,...]] = pickle.load(file)
 		return data
 
-	def get_where(self,table_name:str,column_name:str,is_equal_to:any) -> Union[tuple[any,...]]:
+	def get_where(self,table_name:str,column_name:str,is_equal_to:Any) -> Union[tuple[Any,...]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
-		data:list[tuple[any,...]] = self.get_all(table_name)
+		data:list[tuple[Any,...]] = self.get_all(table_name)
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
 				if column.Name != column_name:
@@ -132,11 +132,11 @@ class GrapesDatabase:
 					return row
 		return ()
 
-	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[tuple[any,...]]:
+	def get_all_where(self,table_name:str,column_name:str,is_equal_to:Any) -> list[tuple[Any,...]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
-		data:list[tuple[any,...]] = self.get_all(table_name)
-		to_return:list[tuple[any,...]] = []
+		data:list[tuple[Any,...]] = self.get_all(table_name)
+		to_return:list[tuple[Any,...]] = []
 		for row in data:
 			for index, column in enumerate(self.__tables[table_name].Columns):
 				if column.Name != column_name:
