@@ -8,7 +8,7 @@ class Table:
 		self.__table_name:str = table_name
 		self.__columns:list[Column] = columns
 		self.__last:int = 0
-		return
+
 	@property
 	def GRAPES_VERSION(self) -> str:
 		return self.__GRAPES_VERSION

@@ -11,7 +11,7 @@ class Column:
 		self.__increment_by:Union[int,float] = increment_by
 		if (type != int and type != float) and auto_increment:
 			raise ColumnInvalidSetting("You cannot use auto increments on anything other than integers or floats.")
-		return
+
 	@property
 	def Name(self) -> str:
 		return self.__name

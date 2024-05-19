@@ -45,7 +45,6 @@ class GrapesDatabase:
 			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer from potential data loss if you don't re-make the table for this version of switch to the table's version")
 			if not self.__force_through_warnings:
 				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
-		return
 	
 	def __generate_files(self,dir_structure:dict) -> None:
 		for parent, children in dir_structure.items():
@@ -55,24 +54,18 @@ class GrapesDatabase:
 				self.__generate_files(children)
 			elif not os.path.exists(children):
 				os.mkdir(children)
-		return
 	
 	def __update_definition(self) -> None:
 		with open(f"{self.__tables_dir}/definition.bin","rb") as file:
 			self.__tables:dict = pickle.load(file)
-			file.close()
-		return
 	
 	def __upgrade_definition(self) -> None:
 		with open(f"{self.__tables_dir}/definition.bin","wb") as file:
 			pickle.dump(self.__tables,file)
-			file.close()
-		return
 	
 	def force_reload(self) -> None:
 		self.__generate_files(self.__dir_structure)
 		self.__update_definition()
-		return
 	
 	def create_table(self,table:Table) -> None:
 		if table.Name in self.__tables:
@@ -89,8 +82,6 @@ class GrapesDatabase:
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table.Name}.grape","wb") as file:
 			pickle.dump([],file)
-			file.close()
-		return
 	
 	def delete_table(self,table_name:str) -> None:
 		if table_name not in self.__tables:
@@ -98,7 +89,6 @@ class GrapesDatabase:
 		os.remove(f"{self.__tables_dir}/{table_name}.grape")
 		del self.__tables[table_name]
 		self.__upgrade_definition()
-		return
 	
 	def has_table(self,table_name:str) -> bool:
 		return table_name in self.__tables
@@ -114,7 +104,6 @@ class GrapesDatabase:
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
 			data:list[Union[tuple[any,...],None]] = pickle.load(file)
-			file.close()
 		for index, column in enumerate(self.__tables[table_name].Columns):
 			if len(values) < index+1:
 				values += (column.DefaultValue,)
@@ -123,18 +112,15 @@ class GrapesDatabase:
 		data.append(values)
 		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
 			pickle.dump(data,file)
-			file.close()
-		return
 	
 	def get_all(self,table_name:str) -> list[tuple[any,...]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
 			data:list[tuple[any,...]] = pickle.load(file)
-			file.close()
 		return data
 
-	def get_where(self,table_name:str,column_name:str,is_equal_to:any) -> Union[tuple[any,...],None]:
+	def get_where(self,table_name:str,column_name:str,is_equal_to:any) -> Union[tuple[any,...]]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		data:list[tuple[any,...]] = self.get_all(table_name)
@@ -144,7 +130,7 @@ class GrapesDatabase:
 					continue
 				if row[index] == is_equal_to:
 					return row
-		return
+		return ()
 
 	def get_all_where(self,table_name:str,column_name:str,is_equal_to:any) -> list[tuple[any,...]]:
 		if table_name not in self.__tables:
