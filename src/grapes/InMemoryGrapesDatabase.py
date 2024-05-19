@@ -9,9 +9,9 @@ from .GrapesDatabase import GrapesDatabase
 class InMemoryGrapesDatabase(GrapesDatabase):
 	def __init__(self,file_loc:str,data_directory:str="./data",write_rate:float=120.0,force_through_warnings:bool=False) -> None:
 		super().__init__(file_loc=file_loc,data_directory=data_directory,force_through_warnings=force_through_warnings)
-		self.__table_data:dict = {}
+		self.__table_data:dict[str,list[tuple[Any,...]]] = {}
 		self.__write_rate:float = write_rate
-		self.__modified_tables:list=[]
+		self.__modified_tables:list[str]=[]
 		self.__update_tables()
 		self.__upgrade_thread:Thread = Thread(target=self.__write_data_thread)
 		self.__upgrade_thread.daemon = True
@@ -40,7 +40,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 	
 	def create_table(self,table:Table) -> None:
 		super().create_table(table)
-		self.__table_data[table.Name] = []
+		self.__table_data[table.Name]:list[tuple[Any,...]] = []
 	
 	def delete_table(self, table_name: str) -> None:
 		super().delete_table(table_name)
