@@ -22,7 +22,7 @@ class GrapesDatabase:
 				self.__tables_dir: {}
 			}
 		}
-		self.__tables:dict = {}
+		self.__tables:dict[str,Table] = {}
 		self.__generate_files(self.__dir_structure)
 		if os.path.exists(f"{self.__tables_dir}/definition.bin"):
 			self.__update_definition()
@@ -57,7 +57,7 @@ class GrapesDatabase:
 	
 	def __update_definition(self) -> None:
 		with open(f"{self.__tables_dir}/definition.bin","rb") as file:
-			self.__tables:dict = pickle.load(file)
+			self.__tables:dict[str,Table] = pickle.load(file)
 	
 	def __upgrade_definition(self) -> None:
 		with open(f"{self.__tables_dir}/definition.bin","wb") as file:
