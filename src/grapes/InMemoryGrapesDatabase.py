@@ -1,6 +1,6 @@
 import pickle, time
 from threading import Thread
-from typing import Union, Any
+from typing import Any
 
 from .Errors import InsertError, GetError
 from .Table import Table
@@ -68,7 +68,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		return self.__table_data[table_name]
 
-	def get_where(self,table_name:str,column_name:str,is_equal_to:Any) -> Union[tuple[Any,...]]:
+	def get_where(self,table_name:str,column_name:str,is_equal_to:Any) -> tuple[Any,...]:
 		if table_name not in self._GrapesDatabase__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		for row in self.__table_data[table_name]:

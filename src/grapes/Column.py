@@ -1,12 +1,12 @@
-from typing import Union, Any as any, Callable
+from typing import Union, Any, Callable
 
 from .Errors.ColumnError import ColumnInvalidSetting
 
 class Column:
-	def __init__(self,name:str,type:Callable,default_value:any="",auto_increment:bool=False,increment_by:Union[int,float]=1) -> None:
+	def __init__(self,name:str,type:Callable,default_value:Any="",auto_increment:bool=False,increment_by:Union[int,float]=1) -> None:
 		self.__name:str = name
 		self.__type:Callable = type
-		self.__default_value:any = default_value
+		self.__default_value:Any = default_value
 		self.__auto_increment:bool = auto_increment
 		self.__increment_by:Union[int,float] = increment_by
 		if (type != int and type != float) and auto_increment:
@@ -19,7 +19,7 @@ class Column:
 	def OfType(self) -> Callable:
 		return self.__type
 	@property
-	def DefaultValue(self) -> any:
+	def DefaultValue(self) -> Any:
 		return self.__default_value
 	@property
 	def AutoIncrement(self) -> bool:

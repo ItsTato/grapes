@@ -1,5 +1,5 @@
 import os, pickle
-from typing import Union, Any
+from typing import Any
 
 from .Table import Table
 from .Errors import TableError, InsertError, GetError
@@ -103,7 +103,7 @@ class GrapesDatabase:
 		self.__tables[table_name].Last += 1
 		self.__upgrade_definition()
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
-			data:list[Union[tuple[Any,...],None]] = pickle.load(file)
+			data:list[tuple[Any,...]|None] = pickle.load(file)
 		for index, column in enumerate(self.__tables[table_name].Columns):
 			if len(values) < index+1:
 				values += (column.DefaultValue,)
@@ -120,7 +120,7 @@ class GrapesDatabase:
 			data:list[tuple[Any,...]] = pickle.load(file)
 		return data
 
-	def get_where(self,table_name:str,column_name:str,is_equal_to:Any) -> Union[tuple[Any,...]]:
+	def get_where(self,table_name:str,column_name:str,is_equal_to:Any) -> tuple[Any,...]:
 		if table_name not in self.__tables:
 			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
 		data:list[tuple[Any,...]] = self.get_all(table_name)
