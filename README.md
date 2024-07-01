@@ -8,39 +8,39 @@ Want to talk to us or need further help? Feel free to join our [community server
 Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for installation instructions.
 
 ## Current Project Goals
-- Get this shit on pypi (once it's finished (`v2.0.0`))
-- Finish this thing (first release: `v2.0.0`)
-- `CachedInMemoryGrapesDatabase()` class when?
+- [ ] Get this shit on pypi (once it's finished (`v2.0.0`))
+- [ ] Finish this thing (first release: `v2.0.0`)
+- [ ] `CachedInMemoryGrapesDatabase()` class when?
 
 ## Project Roadmap
 
 ### GrapesDatabase()
 
 #### Table
-- ~~Creation~~
-- ~~Deletion~~
-- Modification
+- [x] Creation
+- [x] Deletion
+- [ ] Modification
 
 #### Stored Data
-- ~~Insertion~~
-- ~~Retrieval~~
-- ~~Specific Retrieval~~
-- Removal
-- Modification
+- [x] Insertion
+- [x] Retrieval
+- [x] Specific Retrieval
+- [ ] Removal
+- [ ] Modification
 
 ### InMemoryGrapesDatabase()
 
 #### Table
-- ~~Creation~~
-- ~~Deletion~~
-- Modification
+- [x] Creation
+- [x] Deletion
+- [ ] Modification
 
 #### Stored Data
-- ~~Insertion~~
-- ~~Retrieval~~
-- ~~Specific Retrieval~~
-- Removal
-- Modification
+- [x] Insertion
+- [x] Retrieval
+- [x] Specific Retrieval
+- [ ] Removal
+- [ ] Modification
 
 ### CachedGrapesDatabase()
 
