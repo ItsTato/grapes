@@ -94,10 +94,11 @@ class GrapesDatabase:
 		if table_name not in self.__tables:
 			raise TableError.TableDoesNotExist(f"No table named \"{table_name}\" could be found or exists in the database.")
 		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
-			table_data = file.read()
+			table_data:bytes = file.read()
 		with open(f"{self.__tables_dir}/{new_name}.grape","wb") as file:
 			file.write(table_data)
 		self.__tables[new_name] = copy.deepcopy(self.__tables[table_name])
+		os.remove(f"{self.__tables_dir}/{table_name}.grape")
 		del self.__tables[table_name]
 		self.__upgrade_definition()
 
