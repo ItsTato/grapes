@@ -10,7 +10,8 @@ Want to talk to us or need further help? Feel free to join our [community server
 
 ## Installing
 > [!IMPORTANT]
-> Grapes requires at least Python 3.10 or above!
+> Grapes requires at least [Python 3.10 or above](https://www.python.org/downloads/)!
+
 Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for installation instructions.
 
 ## Current Project Goals
