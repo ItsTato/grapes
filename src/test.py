@@ -39,7 +39,7 @@ db2.insert_into("Users",(22,"I exist!",7))
 print(db2.get_all("Users"))
 print(db2.get_where("Users","ID",22))
 
-# With write rate 120.0s there's no chance
-# of this data being written, so must do
-# manually...
+# With a write rate of 120.0s there's
+# no chance for this data to be written.
+# So, we must write it manually...
 db2.write_all_data()
