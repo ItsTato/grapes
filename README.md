@@ -39,7 +39,7 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 #### Table
 - [x] Creation
 - [x] Deletion
-- [ ] Renaming
+- [x] Renaming
 - [ ] Adding Columns
 - [ ] Removing Columns
 

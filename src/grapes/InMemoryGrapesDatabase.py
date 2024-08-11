@@ -1,4 +1,4 @@
-import pickle, time
+import pickle, time, copy
 from threading import Thread
 from typing import Any
 
@@ -42,11 +42,19 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 		super().create_table(table)
 		self.__table_data[table.Name] = []
 
-	def delete_table(self, table_name: str) -> None:
+	def delete_table(self,table_name:str) -> None:
 		super().delete_table(table_name)
 		del self.__table_data[table_name]
 		if table_name in self.__modified_tables:
 			self.__modified_tables.remove(table_name)
+	
+	def rename_table(self,table_name:str,new_name:str) -> None:
+		super().rename_table(table_name,new_name)
+		self.__table_data[new_name] = copy.deepcopy(self.__table_data[table_name])
+		del self.__table_data[table_name]
+		if table_name in self.__modified_tables:
+			self.__modified_tables.remove(table_name)
+			self.__modified_tables.append(new_name)
 
 	def insert_into(self,table_name:str,values:tuple[Any,...]) -> None:
 		if table_name not in self._GrapesDatabase__tables:
