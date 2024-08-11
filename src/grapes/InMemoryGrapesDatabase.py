@@ -40,7 +40,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 
 	def create_table(self,table:Table) -> None:
 		super().create_table(table)
-		self.__table_data[table.Name]:list[tuple[Any,...]] = []
+		self.__table_data[table.Name] = []
 
 	def delete_table(self, table_name: str) -> None:
 		super().delete_table(table_name)

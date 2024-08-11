@@ -18,6 +18,9 @@ class Table:
 	@property
 	def Name(self) -> str:
 		return self.__table_name
+	@Name.setter
+	def Name(self,new_name:str) -> None:
+		self.__table_name = new_name
 	@property
 	def Columns(self) -> list[Column]:
 		return self.__columns

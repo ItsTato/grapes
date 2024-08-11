@@ -1,4 +1,4 @@
-import os, pickle
+import os, pickle, copy
 from typing import Any
 
 from .Table import Table
@@ -42,7 +42,7 @@ class GrapesDatabase:
 			if not self.__force_through_warnings:
 				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed Anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
 		if warn_python:
-			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer from potential data loss if you don't re-make the table for this version of switch to the table's version")
+			print("[grapes] CRITICAL | Different python versions can interpret things differently! You could suffer from potential data loss if you don't re-make the table for this version or switch to version the table was made in!")
 			if not self.__force_through_warnings:
 				raise Exception("Execution cannot continue for your own safety.\n\nTIP: If you want to proceed Anyways, pass in argument \"force_through_warnings\" as true when initializing the database.")
 	
@@ -90,6 +90,17 @@ class GrapesDatabase:
 		del self.__tables[table_name]
 		self.__upgrade_definition()
 	
+	def rename_table(self,table_name:str,new_name:str) -> None:
+		if table_name not in self.__tables:
+			raise TableError.TableDoesNotExist(f"No table named \"{table_name}\" could be found or exists in the database.")
+		with open(f"{self.__tables_dir}/{table_name}.grape","rb") as file:
+			table_data = pickle.load(file)
+		with open(f"{self.__tables_dir}/{new_name}.grape","wb") as file:
+			pickle.dump(table_data,file)
+		self.__tables[new_name] = copy.deepcopy(self.__tables[table_name])
+		del self.__tables[table_name]
+		self.__upgrade_definition()
+
 	def has_table(self,table_name:str) -> bool:
 		return table_name in self.__tables
 	
