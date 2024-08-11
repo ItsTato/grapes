@@ -1,3 +1,7 @@
+> [!WARNING]
+> This project is not finished.
+> Data loss is highly possible!
+
 # grapes
 Grapes is a poorly-written, self-proclaimed "database" made entirely in Python 3.10 out of all languages...
 
@@ -19,7 +23,7 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 #### Table
 - [x] Creation
 - [x] Deletion
-- [ ] Renaming
+- [x] Renaming
 - [ ] Adding Columns
 - [ ] Removing Columns
 
@@ -35,7 +39,9 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 #### Table
 - [x] Creation
 - [x] Deletion
-- [ ] Modification
+- [ ] Renaming
+- [ ] Adding Columns
+- [ ] Removing Columns
 
 #### Stored Data
 - [x] Insertion
