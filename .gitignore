@@ -166,3 +166,6 @@ src/bin_tests.py
 *.grape
 *.bin
 .idea/
+*setup.py
+*build/
+*dist/

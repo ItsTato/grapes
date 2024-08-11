@@ -15,7 +15,7 @@ Want to talk to us or need further help? Feel free to join our [community server
 Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for installation instructions.
 
 ## Current Project Goals
-- [ ] Get this shit on pypi (once it's finished (`v2.0.0`))
+- [x] Get this on pypi
 - [ ] Finish this thing (first release: `v2.0.0`)
 - [ ] `CachedInMemoryGrapesDatabase()` class when?
 
