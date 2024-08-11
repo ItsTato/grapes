@@ -9,6 +9,8 @@ Grapes is a poorly-written, self-proclaimed "database" made entirely in Python 3
 Want to talk to us or need further help? Feel free to join our [community server](https://discord.gg/SqdNj5mYn5)!
 
 ## Installing
+> [!IMPORTANT]
+> Grapes requires at least Python 3.10 or above!
 Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for installation instructions.
 
 ## Current Project Goals
