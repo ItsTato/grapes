@@ -95,3 +95,21 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 					to_return.append(row)
 					break
 		return to_return
+	
+	def remove_where(self,table_name:str,column_name:str,is_equal_to:Any,first_encounter:bool=False) -> None:
+		if table_name not in self._GrapesDatabase__tables:
+			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
+		data:list[tuple[Any,...]] = self.__table_data[table_name]
+		modified:bool = False
+		for row in data:
+			for index, column in enumerate(self.__tables[table_name].Columns):
+				if column.Name != column_name:
+					continue
+				if row[index] == is_equal_to:
+					data.remove(row)
+					modified = True
+					if first_encounter:
+						break
+		if modified != False:
+			self.__modified_tables.append(table_name)
+			self.__upgrade_tables()

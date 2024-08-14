@@ -34,7 +34,7 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 - [x] Insertion
 - [x] Retrieval
 - [x] Specific Retrieval
-- [ ] Removal
+- [x] Removal
 - [ ] Modification
 
 ### InMemoryGrapesDatabase()
@@ -50,7 +50,7 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 - [x] Insertion
 - [x] Retrieval
 - [x] Specific Retrieval
-- [ ] Removal
+- [x] Removal
 - [ ] Modification
 
 ### CachedGrapesDatabase()

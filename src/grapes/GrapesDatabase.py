@@ -156,3 +156,18 @@ class GrapesDatabase:
 				if row[index] == is_equal_to:
 					to_return.append(row)
 		return to_return
+	
+	def remove_where(self,table_name:str,column_name:str,is_equal_to:Any,first_encounter:bool=False) -> None:
+		if table_name not in self.__tables:
+			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
+		data:list[tuple[Any,...]] = self.get_all(table_name)
+		for row in data:
+			for index, column in enumerate(self.__tables[table_name].Columns):
+				if column.Name != column_name:
+					continue
+				if row[index] == is_equal_to:
+					data.remove(row)
+					if first_encounter:
+						break
+		with open(f"{self.__tables_dir}/{table_name}.grape","wb") as file:
+			pickle.dump(data,file)
