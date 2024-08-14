@@ -28,6 +28,7 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 - [x] Deletion
 - [x] Renaming
 - [ ] Adding Columns
+- [ ] Renaming Columns
 - [ ] Removing Columns
 
 #### Stored Data
@@ -44,6 +45,7 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 - [x] Deletion
 - [x] Renaming
 - [ ] Adding Columns
+- [ ] Renaming Columns
 - [ ] Removing Columns
 
 #### Stored Data
