@@ -7,8 +7,8 @@ from .Table import Table
 from .GrapesDatabase import GrapesDatabase
 
 class InMemoryGrapesDatabase(GrapesDatabase):
-	def __init__(self,file_loc:str,data_directory:str="./data",write_rate:float=120.0,force_through_warnings:bool=False) -> None:
-		super().__init__(file_loc=file_loc,data_directory=data_directory,force_through_warnings=force_through_warnings)
+	def __init__(self,file_loc:str,data_directory:str="./data",write_rate:float=60.0,force_through_warnings:bool=False,table_extension:str="grape",definition_extension:str="bin") -> None:
+		super().__init__(file_loc=file_loc,data_directory=data_directory,force_through_warnings=force_through_warnings,table_extension=table_extension,definition_extension=definition_extension)
 		self.__table_data:dict[str,list[tuple[Any,...]]] = {}
 		self.__write_rate:float = write_rate
 		self.__modified_tables:list[str]=[]
@@ -19,13 +19,13 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 
 	def __update_tables(self) -> None:
 		for table in self._GrapesDatabase__tables:
-			with open(f"{self._GrapesDatabase__tables_dir}/{table}.grape","rb") as file:
+			with open(f"{self._GrapesDatabase__tables_dir}/{table}.{self._GrapesDatabase__table_extension}","rb") as file:
 				self.__table_data[table] = pickle.load(file)
 
 	def __upgrade_tables(self) -> None:
 		for table in self.__modified_tables:
 			self.__modified_tables.remove(table)
-			with open(f"{self._GrapesDatabase__tables_dir}/{table}.grape","wb") as file:
+			with open(f"{self._GrapesDatabase__tables_dir}/{table}.{self._GrapesDatabase__table_extension}","wb") as file:
 				pickle.dump(self.__table_data[table],file)
 
 	def __write_data_thread(self) -> None:
@@ -102,7 +102,7 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 		data:list[tuple[Any,...]] = self.__table_data[table_name]
 		modified:bool = False
 		for row in data:
-			for index, column in enumerate(self.__tables[table_name].Columns):
+			for index, column in enumerate(self._GrapesDatabase__tables[table_name].Columns):
 				if column.Name != column_name:
 					continue
 				if row[index] == is_equal_to:
@@ -110,6 +110,44 @@ class InMemoryGrapesDatabase(GrapesDatabase):
 					modified = True
 					if first_encounter:
 						break
-		if modified != False:
+		if modified:
+			self.__table_data[table_name] = data
+			self.__modified_tables.append(table_name)
+			self.__upgrade_tables()
+	
+	def modify(self,table_name:str,column_name:str,is_equal_to:Any,change_to:Any) -> None:
+		if table_name not in self._GrapesDatabase__tables:
+			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
+		data:list[tuple[Any,...]] = self.__table_data[table_name]
+		modified:bool = False
+		for row in data:
+			for index, column in enumerate(self._GrapesDatabase__tables[table_name].Columns):
+				if column.Name != column_name:
+					continue
+				if row[index] == is_equal_to:
+					as_list = list(row[index])
+					as_list[index] = change_to
+					row = tuple(as_list)
+					modified = True
+		if modified:
+			self.__table_data[table_name] = data
+			self.__modified_tables.append(table_name)
+			self.__upgrade_tables()
+
+	def replace(self,table_name:str,column_name:str,is_equal_to:Any,change_to:tuple[Any,...]) -> None:
+		if table_name not in self._GrapesDatabase__tables:
+			raise GetError.TableNotFound(f"No table named \"{table_name}\" could be found or exists in the database.")
+		data:list[tuple[Any,...]] = self.__table_data[table_name]
+		modified:bool = False
+		for index, row in enumerate(data):
+			for index, column in enumerate(self._GrapesDatabase__tables[table_name].Columns):
+				if column.Name != column_name:
+					continue
+				if row[index] == is_equal_to:
+					print('yo!')
+					data[index] = change_to
+					modified = True
+		if modified:
+			self.__table_data[table_name] = data
 			self.__modified_tables.append(table_name)
 			self.__upgrade_tables()

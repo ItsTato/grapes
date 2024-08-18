@@ -39,7 +39,11 @@ db2.insert_into("Users",(22,"I exist!",7))
 print(db2.get_all("Users"))
 print(db2.get_where("Users","ID",22))
 
-# With a write rate of 120.0s there's
+# Replace
+db2.replace("Users","Name","I exist!",(24,"I yo!",0))
+print(db2.get_all("Users"))
+
+# With a write rate of 60.0s/write there's
 # no chance for this data to be written.
 # So, we must write it manually...
 db2.write_all_data()

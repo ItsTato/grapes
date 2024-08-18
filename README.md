@@ -1,9 +1,14 @@
-> [!WARNING]
-> This project is not finished.
-> Data loss is highly possible!
-
 # grapes
 Grapes is a poorly-written, self-proclaimed "database" made entirely in Python 3.10 out of all languages...
+
+> [!WARNING]
+> This project is not finished.
+> There are bugs regarding data storage & modification.
+> Please do not use this in a production environment until it's safe.
+
+> [!NOTE]
+> Please report any bugs you find!
+> It would mean a lot :3
 
 ## Community
 Want to talk to us or need further help? Feel free to join our [community server](https://discord.gg/SqdNj5mYn5)!
@@ -27,16 +32,18 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 - [x] Creation
 - [x] Deletion
 - [x] Renaming
+- [x] Adding Columns (Upon Creation)
 - [ ] Adding Columns
 - [ ] Renaming Columns
 - [ ] Removing Columns
 
-#### Stored Data
+#### ~~Stored Data~~
 - [x] Insertion
 - [x] Retrieval
 - [x] Specific Retrieval
 - [x] Removal
-- [ ] Modification
+- [x] Modification
+- [x] Replacing (Whole Row)
 
 ### InMemoryGrapesDatabase()
 
@@ -44,16 +51,18 @@ Look at [this wiki page](https://github.com/ItsTato/grapes/wiki/Installing#) for
 - [x] Creation
 - [x] Deletion
 - [x] Renaming
+- [x] Adding Columns (Upon Creation)
 - [ ] Adding Columns
 - [ ] Renaming Columns
 - [ ] Removing Columns
 
-#### Stored Data
+#### ~~Stored Data~~
 - [x] Insertion
 - [x] Retrieval
 - [x] Specific Retrieval
 - [x] Removal
-- [ ] Modification
+- [x] Modification
+- [x] Replacing (Whole Row)
 
 ### CachedGrapesDatabase()
 
