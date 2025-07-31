@@ -1,3 +1,6 @@
+# Archival
+This repository has been migrated to https://git.tlet.xyz/Tato/grapes.
+
 # grapes
 Grapes is a poorly-written, self-proclaimed "database" made entirely in Python 3.10 out of all languages...
 
